@@ -1,4 +1,4 @@
-<?php
+Package for send query to neo4j server database for wiki knowledge graph backend and front with neovis.js for display graphs from neo4j in php
 please put 
 in your path from mediawiki
 
