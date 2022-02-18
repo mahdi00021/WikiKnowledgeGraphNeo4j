@@ -2,7 +2,9 @@ Package for send query to neo4j server database for wiki knowledge graph backend
 please put 
 in your path from mediawiki
 
-cli : composer update
+first download package 
+then put in your path and run :
+composer install
 
 
 -----------------------------With Category and pages subcategory-------------------------------------
@@ -24,7 +26,6 @@ $pages = WikiKnowledgeGraph::runGraphPages();
 $category = WikiKnowledgeGraph::runGraphCategory();
 
 
------------------------------------------------------------------------------------------------------
 
 
 
