@@ -22,9 +22,12 @@ then put in your path and run :
     
     WikiKnowledgeGraph::setConfig($config);
     
-    $pages = WikiKnowledgeGraph::runGraphPages();
     
     $category = WikiKnowledgeGraph::runGraphCategory();
+    
+    $pages = WikiKnowledgeGraph::runGraphPages();
+    
+    
 
 --------------all pages without category-------------------------------------
 
