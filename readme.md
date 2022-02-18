@@ -14,7 +14,7 @@ then put in your path and run :
 
     $config = [];
     
-    $config['hosturl'] = '[https://mediawiki.com](https://mediawiki.com)';
+    $config['hosturl'] = 'https://mediawiki.com';
     
     $config['bolt'] = 'bolt+s://user:password@localhost';
     
@@ -30,7 +30,7 @@ then put in your path and run :
 
     $config = [];
     
-    $config['hosturl'] = '[https://mediawiki.com](https://mediawiki.com)';
+    $config['hosturl'] = 'https://mediawiki.com';
     
     $config['bolt'] = 'bolt+s://user:password@localhost';
     
