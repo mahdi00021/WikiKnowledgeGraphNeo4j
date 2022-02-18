@@ -92,7 +92,7 @@ class WikiKnowledgeGraph
 			MERGE (p:Page {pageId: page.pageid})
 			ON CREATE SET p.pageTitle = page.title, p.pageUrl = ".self::$config['hosturl']."/wiki/ + apoc.text.urlencode(replace(page.title, ' ', '_'))
 			WITH p,c
-			MERGE (p)-[:IN_CATEGORY]->(c)
+			MERGE (p)-[:PAGE_ROOT]->(c)
 			WITH DISTINCT c
 			SET c.pagesFetched = true', { level: level }) yield value
 			return value
