@@ -1,0 +1,12 @@
+{
+    "name": "mahdi/wiki-knowledge-graph",
+    "description": "wiki knowledge graph for mediawiki",
+    "autoload": {
+        "psr-4": {
+            "Mahdi\\WikiKnowledgeGraph\\": "src/"
+        }
+    },
+    "require": {
+	"laudis/neo4j-php-client": "2.4.*"
+	}
+}
