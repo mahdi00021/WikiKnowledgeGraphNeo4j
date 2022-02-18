@@ -2,7 +2,16 @@
 
 ?>
 <html>
-
+<head>
+        <title>Graphs</title>
+        <style type="text/css">
+            #viz {
+                width: 900px;
+                height: 700px;
+            }
+        </style>
+        <script src="https://rawgit.com/neo4j-contrib/neovis.js/master/dist/neovis.js"></script>
+</head>   
 <script type="text/javascript">
 
         var viz;
@@ -29,7 +38,7 @@
                         "caption": false
                     }
                 },
-                initial_cypher: "MATCH (n)-[r:INTERACTS]->(m) RETURN *"
+                initial_cypher: "MATCH (n) RETURN n"
             };
 
             viz = new NeoVis.default(config);
