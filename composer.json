@@ -2,11 +2,12 @@
     "name": "mahdi/wiki-knowledge-graph",
     "description": "wiki knowledge graph for mediawiki",
     "autoload": {
-        "psr-4": {
-            "Mahdi\\WikiKnowledgeGraph\\": "src/"
-        }
+       "files": ["querycypher.php" ,"graphs.php"],
+		"classmap": [
+			"App"
+		]
     },
     "require": {
-	"laudis/neo4j-php-client": "2.4.*"
+	"laudis/neo4j-php-client": "2.4.4"
 	}
 }
