@@ -16,7 +16,7 @@ class WikiKnowledgeGraph
 
 		self::$config = $config;
         $auth = Authenticate::basic(self::$config['username'], self::$config['password']);
-        self::$client = ClientBuilder::create()->withDriver('bolt', self::$config['bolt'],$auth)->build();
+        self::$client = ClientBuilder::create()->withDriver('default', self::$config['bolt'],$auth)->build();
 	}
 	
 	
