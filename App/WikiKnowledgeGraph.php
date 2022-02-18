@@ -23,10 +23,10 @@ class WikiKnowledgeGraph
 	public static function runGraphCategory()
 	{
 
-        self::$client->sendCypherQuery('CREATE INDEX ON :Category(catId)');
-        self::$client->sendCypherQuery('CREATE INDEX ON :Page(pageTitle)');
-        self::$client->sendCypherQuery('CREATE INDEX ON :Category(catName)');
-        self::$client->sendCypherQuery('CREATE (c:Category:RootCategory {catId: 0, catName: '.self::$config['rootcategory'].', subcatsFetched : false, pagesFetched : false, level: 0 }');
+        self::$client->run('CREATE INDEX ON :Category(catId)');
+        self::$client->run('CREATE INDEX ON :Page(pageTitle)');
+        self::$client->run('CREATE INDEX ON :Category(catName)');
+        self::$client->run('CREATE (c:Category:RootCategory {catId: 0, catName: '.self::$config['rootcategory'].', subcatsFetched : false, pagesFetched : false, level: 0 }');
 		
 		$query = "
 			    UNWIND range(0,3) as level
@@ -48,7 +48,7 @@ class WikiKnowledgeGraph
 				RETURN value
 		";
 		
-		$categorys = self::$client->sendCypherQuery($query)->getResult();
+		$categorys = self::$client->run($query);
 		
 		return $categorys;
 			
@@ -73,7 +73,7 @@ class WikiKnowledgeGraph
 			return value
 		";
 	
-	    $result = self::$client->sendCypherQuery($query)->getResult();
+	    $result = self::$client->run($query);
 		
 		return $result;
 	}
@@ -98,7 +98,7 @@ class WikiKnowledgeGraph
 			return value
 		";
 		
-		$result = self::$client->sendCypherQuery($query)->getResult();
+		$result = self::$client->run($query);
 		
 		return $result;
 	}
