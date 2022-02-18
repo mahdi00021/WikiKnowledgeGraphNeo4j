@@ -8,7 +8,7 @@ first download package
 
 then put in your path and run :
 
-composer install
+    composer install
 
 --------------With Category and pages subcategory----------------------------
 
