@@ -17,13 +17,13 @@ class WikiKnowledgeGraph
 	public static function runGraphCategory()
 	{
 	
-		$this->client->run('CREATE INDEX ON :Category(catId)');
-		$this->client->run('CREATE INDEX ON :Page(pageTitle)');
-		$this->client->run('CREATE INDEX ON :Category(catName)');
-		$this->client->run('CREATE (c:Category:RootCategory {catId: 0, catName: '.$this->config['rootcategory'].', subcatsFetched : false, pagesFetched : false, level: 0 }');
-
-		$categorys = $this->client->run("
-				UNWIND range(0,3) as level
+		$this->client->sendCypherQuery('CREATE INDEX ON :Category(catId)');
+		$this->client->sendCypherQuery('CREATE INDEX ON :Page(pageTitle)');
+		$this->client->sendCypherQuery('CREATE INDEX ON :Category(catName)');
+		$this->client->sendCypherQuery('CREATE (c:Category:RootCategory {catId: 0, catName: '.$this->config['rootcategory'].', subcatsFetched : false, pagesFetched : false, level: 0 }');
+		
+		$query = "
+			    UNWIND range(0,3) as level
 				CALL apoc.cypher.doIt('
 				MATCH (c:Category { subcatsFetched: false, level: $level})
 				CALL apoc.load.json(".$this->config['hosturl']."/w/api.php?format=json&action=query&list=categorymembers&cmtype=subcat&cmtitle=Category:' + apoc.text.urlencode(c.catName) + '&cmprop=ids|title&cmlimit=500')
@@ -40,9 +40,9 @@ class WikiKnowledgeGraph
 				WITH DISTINCT c
 				SET c.subcatsFetched = true', { level: level }) YIELD value
 				RETURN value
-			");
-			
-			
+		";
+		
+		$categorys = $this->client->sendCypherQuery($query)->getResult();
 		
 		return $categorys;
 			
@@ -51,7 +51,7 @@ class WikiKnowledgeGraph
 	public static function runGraphPages()
 	{
 
-		$result = $this->client->run("
+		$query = "
 			UNWIND range(0,4) as level
 			CALL apoc.cypher.doIt('
 			MATCH (c:Category { pagesFetched: false, level: $level })
@@ -65,8 +65,10 @@ class WikiKnowledgeGraph
 			WITH DISTINCT c
 			SET c.pagesFetched = true', { level: level }) yield value
 			return value
-		");
+		";
 	
+	    $result = $this->client->sendCypherQuery($query)->getResult();
+		
 		return $result;
 	}
 
@@ -74,7 +76,7 @@ class WikiKnowledgeGraph
 	public static function runGraphPagesWithoutCategory()
 	{
 
-		$result = $this->client->run("
+		$query = "
 			UNWIND range(0,4) as level
 			CALL apoc.cypher.doIt('
 			MATCH (c:Category { pagesFetched: false, level: $level })
@@ -88,8 +90,10 @@ class WikiKnowledgeGraph
 			WITH DISTINCT c
 			SET c.pagesFetched = true', { level: level }) yield value
 			return value
-		");
-	
+		";
+		
+		$result = $this->client->sendCypherQuery($query)->getResult();
+		
 		return $result;
 	}
 }
