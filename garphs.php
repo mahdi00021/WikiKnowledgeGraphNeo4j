@@ -1,50 +1,49 @@
 <?php
+
+?>
+<?php
 namespace ClientCode;
 
 ?>
 <html>
 <head>
-        <title>Graphs</title>
-        <style type="text/css">
-            #viz {
-                width: 900px;
-                height: 700px;
-            }
-        </style>
-        <script src="https://rawgit.com/neo4j-contrib/neovis.js/master/dist/neovis.js"></script>
-</head>   
-<script type="text/javascript">
-
-        var viz;
-        function draw() {
-            var config = {
-                container_id: "viz",
-                server_url: "bolt://localhost:7687",
-                server_user: "neo4j",
-                server_password: "sorts-swims-burglaries",
-                labels: {
-                    "Character": {
-                        "caption": "name",
-                        "size": "pagerank",
-                        "community": "community",
-                        "title_properties": [
-                            "name",
-                            "pagerank"
-                        ]
-                    }
-                },
-                relationships: {
-                    "INTERACTS": {
-                        "thickness": "weight",
-                        "caption": false
-                    }
-                },
-                initial_cypher: "MATCH (n) RETURN n"
-            };
-
-            viz = new NeoVis.default(config);
-            viz.render();
+    <title>DataViz</title>
+    <style type="text/css">
+        #viz {
+            width: 900px;
+            height: 700px;
         }
-    </script>
-	
+    </style>
+    <script src="https://rawgit.com/neo4j-contrib/neovis.js/master/dist/neovis.js"></script>
+</head>
+<script>
+    function draw() {
+        var config = {
+            container_id: "viz",
+            server_url: "bolt://52.165.240.119:7687",
+            server_user: "neo4j",
+            server_password: "addition-hillskl;ides-balk;",
+            labels: {
+                "Category": {
+                    caption: "user_key",
+                    size: "pagerank",
+                    community: "community"
+                }
+            },
+            relationships: {
+                "Category": {
+                    caption: true,
+                    thickness: "count"
+                }
+            },
+            initial_cypher: "MATCH p=()-[r:SUBCAT_OF]->() RETURN p LIMIT 25"
+        }
+
+        var viz = new NeoVis.default(config);
+        viz.render();
+    }
+</script>
+<body onload="draw()">
+<div id="viz"></div>
+</body>
 </html>
