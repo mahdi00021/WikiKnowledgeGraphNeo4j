@@ -28,9 +28,9 @@ class WikiKnowledgeGraph
     public static function runGraphCategory()
     {
 
-        /*self::$client->run('CREATE INDEX ON :Category(catId)');
+        self::$client->run('CREATE INDEX ON :Category(catId)');
         self::$client->run('CREATE INDEX ON :Page(pageTitle)');
-        self::$client->run('CREATE INDEX ON :Category(catName)');*/
+        self::$client->run('CREATE INDEX ON :Category(catName)');
         self::$client->run("CREATE (c:Category:RootCategory {catId: 0, catName: '" . self::$config['rootcategory'] . "', subcatsFetched : false, pagesFetched : false, level: 0 })");
 
         $query = 'UNWIND range(0,2) as level
