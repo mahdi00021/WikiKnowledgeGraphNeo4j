@@ -28,15 +28,15 @@ class WikiKnowledgeGraph
     public static function runGraphCategory()
     {
 
-        self::$client->run('CREATE INDEX ON :Category(catId)');
+        /*self::$client->run('CREATE INDEX ON :Category(catId)');
         self::$client->run('CREATE INDEX ON :Page(pageTitle)');
-        self::$client->run('CREATE INDEX ON :Category(catName)');
+        self::$client->run('CREATE INDEX ON :Category(catName)');*/
         self::$client->run("CREATE (c:Category:RootCategory {catId: 0, catName: '" . self::$config['rootcategory'] . "', subcatsFetched : false, pagesFetched : false, level: 0 })");
 
         $query = 'UNWIND range(0,2) as level
                     CALL apoc.cypher.doIt("
                     MATCH (c:Category { subcatsFetched: false, level: $level})
-                    CALL apoc.load.json(\'https://en.wikipedia.org/w/api.php?format=json&action=query&list=categorymembers&cmtype=subcat&cmtitle=Category:\' + apoc.text.urlencode(c.catName) + \'&cmprop=ids|title&cmlimit=500\')
+                    CALL apoc.load.json(\''.self::$config['hosturl'].'/w/api.php?format=json&action=query&list=categorymembers&cmtype=subcat&cmtitle=Category:\' + apoc.text.urlencode(c.catName) + \'&cmprop=ids|title&cmlimit=500\')
                     YIELD value as results
                     UNWIND results.query.categorymembers AS subcat
                     MERGE (sc:Category {catId: subcat.pageid})
@@ -63,7 +63,7 @@ class WikiKnowledgeGraph
         $query = 'UNWIND range(0,2) as level
                     CALL apoc.cypher.doIt("
                     MATCH (c:Category { pagesFetched: false, level: $level })
-                    CALL apoc.load.json(\'https://en.wikipedia.org/w/api.php?format=json&action=query&list=categorymembers&cmtype=page&cmtitle=Category:\' + apoc.text.urlencode(c.catName) + \'&cmprop=ids|title&cmlimit=500\')
+                    CALL apoc.load.json(\''.self::$config['hosturl'].'/w/api.php?format=json&action=query&list=categorymembers&cmtype=page&cmtitle=Category:\' + apoc.text.urlencode(c.catName) + \'&cmprop=ids|title&cmlimit=500\')
                     YIELD value as results
                     UNWIND results.query.categorymembers AS page
                     MERGE (p:Page {pageId: page.pageid})
@@ -86,11 +86,11 @@ class WikiKnowledgeGraph
         $query = 'UNWIND range(0,3) as level
                     CALL apoc.cypher.doit("
                     MATCH (c:Category { pagesFetched: false, level: $level })
-                    CALL apoc.load.json(\'https://en.wikipedia.org/w/api.php?action=query&format=json&list=allpages&aplimit=max\')
+                    CALL apoc.load.json(\''.self::$config['hosturl'].'/w/api.php?action=query&format=json&list=allpages&aplimit=max\')
                     YIELD value as results
-                    UNWIND results.query.allpages AS page
+                    UNWIND results.query.categorymembers AS page
                     MERGE (p:Page {pageId: page.pageid})
-                    ON CREATE SET p.pageTitle = page.title, p.pageUrl = \'http://en.wikipedia.org/wiki/\' + apoc.text.urlencode(replace(page.title, \' \', \'_\'))
+                    ON CREATE SET p.pageTitle = page.title, p.pageUrl = \''.self::$config['hosturl'].'/wiki/\' + apoc.text.urlencode(replace(page.title, \' \', \'_\'))
                     WITH p,c
                     MERGE (p)-[:IN_CATEGORY]->(c)
                     WITH DISTINCT c
