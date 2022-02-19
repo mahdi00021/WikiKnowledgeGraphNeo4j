@@ -88,7 +88,7 @@ class WikiKnowledgeGraph
                     MATCH (c:Category { pagesFetched: false, level: $level })
                     CALL apoc.load.json(\'https://en.wikipedia.org/w/api.php?action=query&format=json&list=allpages&aplimit=max\')
                     YIELD value as results
-                    UNWIND results.query.categorymembers AS page
+                    UNWIND results.query.allpages AS page
                     MERGE (p:Page {pageId: page.pageid})
                     ON CREATE SET p.pageTitle = page.title, p.pageUrl = \'http://en.wikipedia.org/wiki/\' + apoc.text.urlencode(replace(page.title, \' \', \'_\'))
                     WITH p,c
