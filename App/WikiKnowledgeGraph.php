@@ -45,7 +45,7 @@ class WikiKnowledgeGraph
                                   sc.pagesFetched = false,
                                   sc.level = $level + 1
                     WITH sc,c
-                    CALL apoc.create.addLabels(sc,[\'Level\' +  ($level + 1) + \'Category\']) YIELD node
+                    CALL apoc.create.addLabels(sc,[\'Level\' +  (sc.level) + \'Category\']) YIELD node
                     MERGE (sc)-[:SUBCAT_OF]->(c)
                     WITH DISTINCT c
                     SET c.subcatsFetched = true", { level: level }) YIELD value
@@ -60,7 +60,7 @@ class WikiKnowledgeGraph
     public static function runGraphPages()
     {
 
-        $query = 'UNWIND range(0,2) as level
+        $query = 'UNWIND range(0,1) as level
                     CALL apoc.cypher.doIt("
                     MATCH (c:Category { pagesFetched: false, level: $level })
                     CALL apoc.load.json(\''.self::$config['hosturl'].'/w/api.php?format=json&action=query&list=categorymembers&cmtype=page&cmtitle=Category:\' + apoc.text.urlencode(c.catName) + \'&cmprop=ids|title&cmlimit=500\')
@@ -83,7 +83,7 @@ class WikiKnowledgeGraph
     public static function runGraphPagesWithoutCategory()
     {
 
-        $query = 'UNWIND range(0,3) as level
+        $query = 'UNWIND range(0,2) as level
                     CALL apoc.cypher.doit("
                     MATCH (c:Category { pagesFetched: false, level: $level })
                     CALL apoc.load.json(\''.self::$config['hosturl'].'/w/api.php?action=query&format=json&list=allpages&aplimit=max\')
